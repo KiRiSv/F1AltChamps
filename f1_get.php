@@ -2,7 +2,7 @@
 <body>
 
     Hello
-    <?php echo $_GET; 
+    <?php echo var_dump($_GET); 
 
 // $query = "SELECT driver_id";
 // for ($x = 0; $x < 34; $x++){
