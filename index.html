@@ -6,39 +6,108 @@
     <link rel="stylesheet" href="main.css">
     <script>
       let current = [25,18,15,12,10,8,6,4,2,1];
+      let mk = [15,12,10,9,8,7,6,5,4,3,2,1];
+      let y1950 = [8,6,4,3,2];
+      let y1960 = [8,6,4,3,2,1];
+      let y1961 = [9,6,4,3,2,1];
+      let y1991 = [10,6,4,3,2,1];
+      let y2003 = [10,8,6,5,4,3,2,1];
+      let posCount = 10;
       function setPointsBoxes(positions) {
         let pos = document.getElementById("positions");
         pos.innerHTML = "";
-        for (let i = 0; i < positions.length; i++) {
+        for (let i = 1; i < positions.length+1; i++) {
           let label = document.createElement("label");
-          label.for = "p"+i.toString();
-          label.innerHTML = "P"+ i.toString;
+          label.id = "lp".concat(i.toString());
+          label.innerHTML = "P".concat(i.toString());
+          label.htmlFor = "p".concat(i.toString());
           pos.append(label);
           let inp = document.createElement("input");
           inp.type = "number";
-          inp.class = "twoDigits";
-          inp.id = "p"+i.toString();
-          inp.value = positions[i];
+          inp.classList.add("twoDigits");
+          inp.id = "p".concat(i.toString());
+          inp.value = positions[i-1];
           pos.append(inp);
         }
+        posCount= positions.length;
       }
-      setPointsBoxes(current);
+      function addPos() {
+        posCount++;
+        let pos = document.getElementById("positions");
+        let label = document.createElement("label");
+        label.htmlFor = "p".concat(posCount.toString());
+        label.innerHTML = "P".concat(posCount.toString());
+        label.id = "lp".concat(posCount.toString());
+        pos.append(label);
+        let inp = document.createElement("input");
+        inp.type = "number";
+        inp.classList.add("twoDigits");
+        inp.id = "p".concat(posCount.toString());
+        inp.value = 0;
+        pos.append(inp);
+        let dd = document.getElementById("system");
+        dd.value= "custom";
+      }
+      function subPos() {
+        let label = document.getElementById("lp".concat(posCount.toString()));
+        let inp = document.getElementById("p".concat(posCount.toString()));
+        label.remove();
+        inp.remove();
+        posCount--;
+        
+        let dd = document.getElementById("system");
+        dd.value= "custom";
+      }
+      function swapDist(){
+        let dd = document.getElementById("system");
+        switch (dd.value) {
+          case "current":
+            setPointsBoxes(current);
+            break;
+          case "mk8":
+            setPointsBoxes(mk);
+            break;
+          case "1950":
+            setPointsBoxes(y1950);
+            break;
+          case "1960":
+            setPointsBoxes(y1960);
+            break;
+          case "1961":
+            setPointsBoxes(y1961);
+            break;
+          case "1991":
+            setPointsBoxes(y1991);
+            break;
+          case "2003":
+            setPointsBoxes(y2003);
+            break;
+          default:
+            break;
+        }
+      }
     </script>
   </head>
-  <body>
+  <body onload="setPointsBoxes(current)">
     <h1>Formula 1 Champions with alternative points distributions</h1>
-    <div class="settings">
-      WDC <label class="switch"><input type="checkbox"><span class="slider round"></span></label> WCC
-      <label for="points-distribution">Choose points distribution:</label>
-      <select name="points-distribution" id="system">     
+    <form action="f1_get.php" class="settings" method="get">
+      WDC <label class="switch"><input type="checkbox" id="championship"><span class="slider round"></span></label> WCC
+      <label for="system">Choose points distribution:</label>
+      <select onchange="swapDist()" name="points-distribution" id="system">     
         <option value="current">Current</option>
+        <option value="1950">1950-1959</option>
+        <option value="1960">1960</option>
+        <option value="1961">1961-1990</option>
+        <option value="1991">1991-2002</option>
+        <option value="2003">2003-2009</option>
         <option value="mk8">Mario Kart 8</option>
-        <option value="1950">1950-19xx</option>
         <option value="custom">Custom</option>
       </select>
       <div id="positions"></div>
-      
-    </div>
+      <button onclick="addPos()">+</button>
+      <button onclick="subPos()">-</button>
+      <input type="submit" value="Calculate">
+    </form>
   </body>
 </html>
 

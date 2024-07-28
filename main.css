@@ -1,12 +1,21 @@
 h1 {
     text-align: center;
-    font-size: 12ch;
+    font-size: 1vw;
     color: #f70100;
+    font-family: Formula1-Regular;
+}
+
+@font-face {
     font-family: Formula1-Regular;
     src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Regular/Formula1-Regular.ttf);
 }
+
 .twoDigits {
-    size: 2;
+    width: 2.5em;
+}
+
+.settings {
+    height: 1ch;
 }
 
 /* The switch - the box around the slider */
