@@ -108,11 +108,12 @@
     </script>
   </head>
   <body onload="setPointsBoxes(current)">
+    <header>
     <h1>Formula 1 Champions with alternative points distributions</h1>
     <form action="index.php" class="settings" method="get">
       WDC <label class="switch"><input type="checkbox" name="championship"><span class="slider round"></span></label> WCC
       <label for="system">Choose points distribution:</label>
-      <select onchange="swapDist()" name="points-distribution" id="system">     
+      <select onchange="swapDist()" class="settings" name="points-distribution" id="system">     
         <option value="current">Current</option>
         <option value="1950">1950-1959</option>
         <option value="1960">1960</option>
@@ -125,15 +126,26 @@
       <label for="flap">Fastest Lap</label>
       <input type="number" name="flap" id="flap" class="twoDigits" value="1">
       <div id="positions"></div>
-      <button onclick="addPos()" id="plus" type="button">+</button>
-      <button onclick="subPos()" id="sub" type="button">-</button>
-      <input type="submit" value="Calculate">
+      <button onclick="addPos()" class="settings" id="plus" type="button">+</button>
+      <button onclick="subPos()" class="settings" id="sub" type="button">-</button>
+      <input type="submit" class="settings" value="Calculate">
     </form>
+    </header>
     <table>
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>👑</th>
+          <th>🥈</th>
+          <th>🥉</th>
+        </tr>
+      </thead>
+      <tbody>
 
-      <!-- <?php 
+      <?php 
       $servername = "localhost";
       $username = "webbah";
+      // Dont look its totally not the pasword but dont look
       $password = "LH44 is the goat";
       $dbname = "f1";
       
@@ -145,10 +157,10 @@
       }
       // checks if first load
       if (count($_GET) == 0){
-        $query = "SELECT * FROM bantable FOR XML RAW()  ";
+        $query = "SELECT * AS td FROM currenttop3 FOR XML RAW('tr'), ELEMENTS,TYPE  ";
           
       } else {
-        $query = "SELECT driver_id , ";
+        $query = "SELECT year, driver_id , ";
         for ($x = 1; $x < 34; $x++){
           if (array_key_exists("P". $x, $_GET)){
             $query .= "( P" . $x . " * " . $_GET["p".$x] . ") +";
@@ -156,10 +168,11 @@
             break;
           }
         }
-        $query .= "( flap * " . $_GET["flap"] . ")";
-        $query .= " FROM bantable";
+        $query .= "( flap * " . $_GET["flap"] . ") AS score";
+        $query .= " FROM final GROUP BY year, driver_id";
       }
-      ?> -->
+      ?> 
+      </tbody>
     </table>
   </body>
 </html>
