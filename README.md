@@ -6,6 +6,8 @@ You can select one of the preset point distributions or enter your own custom on
 
 This project was made by Anna Zhou and Kim Rikter-Svendsen. 
 
+You can see the product on [our website](https://f1.zoeyzhou.net).
+
 # Limitations
 * Ties are broken alphabetically.
 * Sprint races are not included.
@@ -19,3 +21,7 @@ This project was made by Anna Zhou and Kim Rikter-Svendsen.
 Fonts are from the [official F1 website](https://f1.com).
 
 Charts were made using [Chart.js](https://www.chartjs.org/).
+
+# Screenshot of the website
+
+![Screenshot of website in action](https://github.com/KiRiSv/F1AltChamps/blob/main/OconGOAT.png?raw=true)
