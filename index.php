@@ -3,12 +3,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Alternate Formula 1 Champions</title>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script>
-      
       //preset distributions
       const current = [25,18,15,12,10,8,6,4,2,1];
       const mk = [15,12,10,9,8,7,6,5,4,3,2,1];
@@ -195,7 +194,6 @@
             </tr>
           </thead>
           <tbody>
-
           <?php 
           require_once('/home/webadmin/database.php');
           // Create connection
@@ -212,12 +210,12 @@
           //If teams championship
           } elseif (array_key_exists("championship", $_GET)) {
             // create view to tabulate points
-            $query = "CREATE VIEW " . $viewName  . " AS SELECT year, driver_id , ";
+            $innerQuery = "( SELECT year, driver_id , constructor_id, ";
             for ($x = 1; $x < 34; $x++){
               if (array_key_exists("p". $x, $_GET)){
                 //check for valid input and also protect from sql injection
                 if (is_numeric($_GET["p".$x])) {
-                  $query .= "( P" . $x . " * " . $_GET["p".$x] . ") +";
+                  $innerQuery .= "( P" . $x . " * " . $_GET["p".$x] . ") +";
                 } else {
                   die("Invalid data");
                 }
@@ -227,21 +225,19 @@
             }
             //check for valid input and also protect from sql injection
             if (is_numeric($_GET["flap"])) {
-              $query .= "( flap * " . $_GET["flap"] . ") AS score";
+              $innerQuery .= "( flap * " . $_GET["flap"] . ") AS score";
             } else {
               die("Invalid data");
             }
-            $query .= " FROM driver_pos GROUP BY year, driver_id;";
+            $innerQuery .= " FROM driver_pos GROUP BY year, driver_id)";
+            $query = "CREATE VIEW " . $viewName . " AS SELECT year, constructor_id, sum(score) AS score FROM " . $innerQuery . " AS iq GROUP BY iq.year, iq.constructor_id;";
             $conn->query($query);
-            echo $query;
-            echo "<br>";
             // Get the top 3 finishers from the view
-            $query = "SELECT year, (SELECT driver_id FROM " . $viewName . " WHERE year=m.year ORDER BY score DESC, driver_id ASC FETCH FIRST 1 ROWS ONLY) AS P1,";
-            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, driver_id ASC OFFSET 1 ROWS FETCH FIRST 1 ROWS ONLY) AS P2,";
-            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, driver_id ASC OFFSET 2 ROWS FETCH FIRST 1 ROWS ONLY) AS P3 ";
+            $query = "SELECT year, (SELECT constructor_id FROM " . $viewName . " WHERE year=m.year ORDER BY score DESC, constructor_id ASC FETCH FIRST 1 ROWS ONLY) AS P1,";
+            $query .= "(SELECT constructor_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, constructor_id ASC OFFSET 1 ROWS FETCH FIRST 1 ROWS ONLY) AS P2,";
+            $query .= "(SELECT constructor_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, constructor_id ASC OFFSET 2 ROWS FETCH FIRST 1 ROWS ONLY) AS P3 ";
             $query .= "FROM " . $viewName . " m GROUP BY year ORDER BY year DESC;";
-            echo $query;
-          //If drivers championship
+            //If drivers championship
           } else {
             // create view to tabulate points
             $query = "CREATE VIEW " . $viewName  . " AS SELECT year, driver_id , ";
@@ -273,9 +269,9 @@
           }
           $result = $conn->query($query);
           if ($result->num_rows > 0) {
-            // output data of each row
             $championshipCount = array();
             $championshipYears = array();
+            // output data of each row
             while($row = $result->fetch_assoc()) {
               echo "<tr>";
               echo "<td>" . $row["year"] . "</td>";
@@ -336,9 +332,10 @@
         </table>
       </div>
       <div class="column" id="charts">
-        <canvas id="chart" style="/**/"></canvas>
+        <canvas id="chart"></canvas>
         <script>
           const chartElem = document.getElementById("chart");
+          // create y axsis 
           let championshipYears = [];
           for (let index = 1950; index < 2025; index++) {
             championshipYears.push(index);
@@ -347,6 +344,7 @@
             type: 'line',
             data: {
               labels: championshipYears,
+              //data from php script
               datasets: data
             },
             options: {
