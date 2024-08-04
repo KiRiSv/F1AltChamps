@@ -5,6 +5,45 @@ h1 {
     font-family: Formula1-Wide;
 }
 
+table{
+    border-collapse: collapse;
+    border-spacing: 1px;
+}
+td {
+    border: 1px solid #e5e5e5;
+    padding: 5px;    
+}
+
+form {
+    text-align: center;
+}
+
+#positions{
+    display: inline;
+}
+
+#charts{
+    position: relative;
+    width: 50em;
+    height: 40em;
+}
+
+footer{
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    gap: .5em;
+    justify-content: center;
+}
+
+
+
 @font-face {
     font-family: Formula1-Regular;
     src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Regular/Formula1-Regular.ttf);
@@ -19,6 +58,11 @@ h1 {
     width: 2.5em;
 }
 
+canvas{
+    width: 20em;
+    height: 20em;
+}
+
 .settings {
     font-family: Formula1-Regular;
     /* height: 1ch; */
@@ -28,8 +72,8 @@ h1 {
 .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 2em;
+    height: 1.133em;
 }
   
 /* Hide default HTML checkbox */
@@ -55,10 +99,10 @@ h1 {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    height: .8em;
+    width: .8em;
+    left: 0.133em;
+    bottom: 0.133em;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -73,14 +117,14 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    -webkit-transform: translateX(.8em);
+    -ms-transform: translateX(.8em);
+    transform: translateX(.8em);
 }
 
 /* Rounded sliders */
 .slider.round {
-    border-radius: 34px;
+    border-radius: 1.33em;
 }
 
 .slider.round:before {
