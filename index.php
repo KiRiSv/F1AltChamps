@@ -65,6 +65,9 @@
         for (let i = 0; i < positions.length; i++) {
           addPos(positions[i]);
         }
+        if(positions.length==0){
+          document.getElementById("sub").hidden=true;
+        }
       }
       // Add a position number input box
       function addPos(val = 0) {
@@ -86,7 +89,7 @@
           inp.classList.add("twoDigits");
           inp.id = "p".concat(posCount.toString());
           inp.name = "p".concat(posCount.toString());
-          inp.onChange = "setCustom()";
+          inp.onchange = function(){setCustom()};
           inp.value = val;
           pos.append(inp);
           // if number box was added by user change the setting to custom
@@ -210,7 +213,7 @@
           //If teams championship
           } elseif (array_key_exists("championship", $_GET)) {
             // create view to tabulate points
-            $innerQuery = "( SELECT year, driver_id , constructor_id, ";
+            $innerQuery = "( SELECT year, driver_id , constructor_id, Countback, ";
             for ($x = 1; $x < 34; $x++){
               if (array_key_exists("p". $x, $_GET)){
                 //check for valid input and also protect from sql injection
@@ -237,10 +240,10 @@
             $query .= "(SELECT constructor_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, constructor_id ASC OFFSET 1 ROWS FETCH FIRST 1 ROWS ONLY) AS P2,";
             $query .= "(SELECT constructor_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, constructor_id ASC OFFSET 2 ROWS FETCH FIRST 1 ROWS ONLY) AS P3 ";
             $query .= "FROM " . $viewName . " m GROUP BY year ORDER BY year DESC;";
-            //If drivers championship
+            // If drivers championship
           } else {
             // create view to tabulate points
-            $query = "CREATE VIEW " . $viewName  . " AS SELECT year, driver_id , ";
+            $query = "CREATE VIEW " . $viewName  . " AS SELECT year, driver_id , Countback, ";
             for ($x = 1; $x < 34; $x++){
               if (array_key_exists("p". $x, $_GET)){
                 //check for valid input and also protect from sql injection
@@ -262,9 +265,9 @@
             $query .= " FROM driver_pos GROUP BY year, driver_id;";
             $conn->query($query);
             // Get the top 3 finishers from the view
-            $query = "SELECT year, (SELECT driver_id FROM " . $viewName . " WHERE year=m.year ORDER BY score DESC, driver_id ASC FETCH FIRST 1 ROWS ONLY) AS P1,";
-            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, driver_id ASC OFFSET 1 ROWS FETCH FIRST 1 ROWS ONLY) AS P2,";
-            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, driver_id ASC OFFSET 2 ROWS FETCH FIRST 1 ROWS ONLY) AS P3 ";
+            $query = "SELECT year, (SELECT driver_id FROM " . $viewName . " WHERE year=m.year ORDER BY score DESC, Countback ASC FETCH FIRST 1 ROWS ONLY) AS P1,";
+            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, Countback ASC OFFSET 1 ROWS FETCH FIRST 1 ROWS ONLY) AS P2,";
+            $query .= "(SELECT driver_id FROM " . $viewName . "  WHERE year=m.year ORDER BY score DESC, Countback ASC OFFSET 2 ROWS FETCH FIRST 1 ROWS ONLY) AS P3 ";
             $query .= "FROM " . $viewName . " m GROUP BY year ORDER BY year DESC;";
           }
           $result = $conn->query($query);

@@ -2,7 +2,7 @@ h1 {
     text-align: center;
     font-size: 1em;
     color: #f70100;
-    font-family: Formula1-Wide;
+    /* font-family: Speeday-Bold; */
 }
 
 table{
@@ -45,13 +45,13 @@ footer{
 
 
 @font-face {
-    font-family: Formula1-Regular;
-    src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Regular/Formula1-Regular.ttf);
+    font-family: Speeday-Regular;
+    src: url(FORCE%20BATTLE.otf);
 }
 
 @font-face {
-    font-family: Formula1-Wide;
-    src: url(https://www.formula1.com/etc/designs/fom-website/fonts/F1Wide/Formula1-Wide.ttf);
+    font-family: Speeday-Bold;
+    src: url(Speeday-Bold-FFP.ttf);
 }
 
 .twoDigits {
@@ -64,7 +64,7 @@ canvas{
 }
 
 .settings {
-    font-family: Formula1-Regular;
+    /* font-family: Speeday-Regular; */
     /* height: 1ch; */
 }
 
